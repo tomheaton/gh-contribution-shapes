@@ -1,34 +1,35 @@
 type Theme = 'normal' | 'halloween';
 
+const daysInYear = 364;
+
 function generateContributionData() {
-  const daysInYear = 364;
-  const contributions = Array.from({ length: daysInYear }, () =>
+  return Array.from({ length: daysInYear }, () =>
     // Random contribution count (0-4)
     Math.floor(Math.random() * 5)
   );
-  return contributions;
 };
 
-function getColour(count: number, theme: Theme) {
-  if (theme === 'halloween') {
-    switch (count) {
-      case 0: return '#ebedf0'; // no contributions
-      case 1: return '#fde3cf'; // low (light orange)
-      case 2: return '#fcb07e'; // medium-low
-      case 3: return '#f7803a'; // medium-high
-      case 4: return '#d15600'; // high (dark orange)
-      default: return '#ebedf0';
-    }
-  }
+const colours = {
+  normal: {
+    0: '#ebedf0',
+    1: '#c6e48b',
+    2: '#7bc96f',
+    3: '#239a3b',
+    4: '#196127',
+    default: '#ebedf0',
+  },
+  halloween: {
+    0: '#ebedf0',
+    1: '#fde3cf',
+    2: '#fcb07e',
+    3: '#f7803a',
+    4: '#d15600',
+    default: '#ebedf0',
+  },
+} as const;
 
-  switch (count) {
-    case 0: return '#ebedf0'; // no contributions
-    case 1: return '#c6e48b'; // low
-    case 2: return '#7bc96f'; // medium-low
-    case 3: return '#239a3b'; // medium-high
-    case 4: return '#196127'; // high
-    default: return '#ebedf0';
-  }
+function getColour(count: number, theme: Theme) {
+  return colours[theme][count] || colours[theme].default;
 };
 
 function ContributionSquare(props: { count: number, theme: Theme }) {
