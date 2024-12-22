@@ -1,4 +1,4 @@
-type Theme = 'normal' | 'halloween';
+type Theme = 'official' | 'normal' | 'halloween';
 
 const daysInYear = 364;
 
@@ -10,6 +10,14 @@ function generateContributionData() {
 };
 
 const colours = {
+  official: {
+    0: '#0d1117',
+    1: '#9be9a8',
+    2: '#40c463',
+    3: '#30a14e',
+    4: '#216e39',
+    default: '#0d1117',
+  },
   normal: {
     0: '#ebedf0',
     1: '#c6e48b',
@@ -46,7 +54,7 @@ function ContributionGrid(props: { theme: Theme }) {
 
   return (
     <div class="square-grid">
-      {contributions.map((count, index) => (
+      {contributions.map((count) => (
         <ContributionSquare count={count} theme={props.theme} />
       ))}
     </div>
