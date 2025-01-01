@@ -1,11 +1,11 @@
-import { createSignal } from "solid-js";
+import { createSignal, For } from "solid-js";
 
 type Theme = 'official' | 'normal' | 'halloween' | 'winter';
 
 const daysInYear: number = 364;
 
-function generateContributionData() {
-  return Array.from({ length: daysInYear }, () =>
+function generateContributionData(length: number = daysInYear): number[] {
+  return Array.from({ length }, () =>
     Math.floor(Math.random() * 5)
   );
 };
@@ -65,21 +65,61 @@ function ContributionGrid(props: { theme: Theme }) {
 
   return (
     <div class="square-grid">
-      {contributions.map((count) => (
-        <ContributionSquare count={count} theme={props.theme} />
-      ))}
+      <For each={contributions}>
+        {(count) => (
+          <ContributionSquare count={count} theme={props.theme} />
+        )}
+      </For>
     </div>
   );
+};
+
+function EditableContributionSquare(props: { count: number, theme: Theme, setCount: (count: number) => void }) {
+  return (
+    <button
+      class="size-3 rounded-sm"
+      style={{ 'background-color': getColour(props.count, props.theme) }}
+      onClick={() => {
+        const newCount = (props.count + 1) % 5;
+        props.setCount(newCount);
+      }}
+    />
+  );
+}
+
+function EditableContributionGrid(props: { theme: Theme }) {
+  const [contributions, setContributions] = createSignal(generateContributionData(52 * 52));
+
+  return (
+    <div class="square-grid">
+      <For each={contributions()}>
+        {(count, index) => (
+          <EditableContributionSquare
+            count={count}
+            theme={props.theme}
+            setCount={(newCount) => {
+              setContributions((contributions) => {
+                const newContributions = [...contributions];
+                newContributions[index()] = newCount;
+                return newContributions;
+              });
+            }}
+          />
+        )}
+      </For>
+    </div>
+  )
 };
 
 export default function App() {
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
       <h1 class="text-2xl font-bold tracking-tighter">My Contributions</h1>
-      <ContributionGrid theme="official" />
-      <ContributionGrid theme="normal" />
-      <ContributionGrid theme="halloween" />
-      <ContributionGrid theme="winter" />
+      {/* <ContributionGrid theme="official" /> */}
+      {/* <ContributionGrid theme="normal" /> */}
+      {/* <ContributionGrid theme="halloween" /> */}
+      {/* <ContributionGrid theme="winter" /> */}
+      <EditableContributionGrid theme="official" />
     </main>
   );
 };
