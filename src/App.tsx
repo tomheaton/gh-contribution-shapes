@@ -1,7 +1,5 @@
 import { createSignal, For } from "solid-js";
 
-type Theme = 'official' | 'normal' | 'halloween' | 'winter';
-
 const daysInYear: number = 364;
 
 function generateContributionData(length: number = daysInYear): number[] {
@@ -47,6 +45,12 @@ const themes = {
   }
 } as const;
 
+type Theme = keyof typeof themes;
+
+const borderRadii = ['rounded-none', 'rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-full'] as const;
+
+type BorderRadius = typeof borderRadii[number];
+
 function getColour(count: number, theme: Theme): string {
   return themes[theme][count] || themes[theme].default;
 };
@@ -74,10 +78,13 @@ function ContributionGrid(props: { theme: Theme }) {
   );
 };
 
-function EditableContributionSquare(props: { count: number, theme: Theme, setCount: (count: number) => void }) {
+function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius }) {
   return (
     <button
-      class="size-3 rounded-sm"
+      class="size-3"
+      classList={{
+        [props.borderRadius]: true
+      }}
       style={{ 'background-color': getColour(props.count, props.theme) }}
       onClick={() => {
         const newCount = (props.count + 1) % 5;
@@ -87,7 +94,7 @@ function EditableContributionSquare(props: { count: number, theme: Theme, setCou
   );
 }
 
-function EditableContributionGrid(props: { theme: Theme }) {
+function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRadius }) {
   const [contributions, setContributions] = createSignal(generateContributionData(52 * 52));
 
   return (
@@ -96,7 +103,6 @@ function EditableContributionGrid(props: { theme: Theme }) {
         {(count, index) => (
           <EditableContributionSquare
             count={count}
-            theme={props.theme}
             setCount={(newCount) => {
               setContributions((contributions) => {
                 const newContributions = [...contributions];
@@ -104,6 +110,8 @@ function EditableContributionGrid(props: { theme: Theme }) {
                 return newContributions;
               });
             }}
+            theme={props.theme}
+            borderRadius={props.borderRadius}
           />
         )}
       </For>
@@ -113,6 +121,7 @@ function EditableContributionGrid(props: { theme: Theme }) {
 
 export default function App() {
   const [theme, setTheme] = createSignal<Theme>('official');
+  const [borderRadius, setBorderRadius] = createSignal<BorderRadius>('rounded-sm');
 
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
@@ -121,9 +130,10 @@ export default function App() {
         <For each={Object.keys(themes)}>
           {(t) => (
             <button
-              class="px-2 py-1 rounded-md"
+              class="px-2 py-1 text-sm font-semibold"
               classList={{
                 [t === theme() ? 'bg-gray-200' : 'bg-gray-100']: true,
+                [borderRadius()]: true,
               }}
               onClick={() => setTheme(t as Theme)}
             >
@@ -132,7 +142,23 @@ export default function App() {
           )}
         </For>
       </div>
-      <EditableContributionGrid theme={theme()} />
+      <div class="flex gap-x-2">
+        <For each={borderRadii}>
+          {(r) => (
+            <button
+              class="px-2 py-1 text-sm font-semibold"
+              classList={{
+                [r === borderRadius() ? 'bg-gray-200' : 'bg-gray-100']: true,
+                [borderRadius()]: true,
+              }}
+              onClick={() => setBorderRadius(r)}
+            >
+              {r}
+            </button>
+          )}
+        </For>
+      </div>
+      <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} />
     </main>
   );
 };
