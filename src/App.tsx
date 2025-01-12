@@ -10,7 +10,7 @@ function generateContributionData(length: number = daysInYear): number[] {
   );
 };
 
-const colours = {
+const themes = {
   official: {
     // 0: '#0d1117',
     0: '#ebedf0',
@@ -48,7 +48,7 @@ const colours = {
 } as const;
 
 function getColour(count: number, theme: Theme): string {
-  return colours[theme][count] || colours[theme].default;
+  return themes[theme][count] || themes[theme].default;
 };
 
 function ContributionSquare(props: { count: number, theme: Theme }) {
@@ -112,14 +112,27 @@ function EditableContributionGrid(props: { theme: Theme }) {
 };
 
 export default function App() {
+  const [theme, setTheme] = createSignal<Theme>('official');
+
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
       <h1 class="text-2xl font-bold tracking-tighter">My Contributions</h1>
-      {/* <ContributionGrid theme="official" /> */}
-      {/* <ContributionGrid theme="normal" /> */}
-      {/* <ContributionGrid theme="halloween" /> */}
-      {/* <ContributionGrid theme="winter" /> */}
-      <EditableContributionGrid theme="official" />
+      <div class="flex gap-x-2">
+        <For each={Object.keys(themes)}>
+          {(t) => (
+            <button
+              class="px-2 py-1 rounded-md"
+              classList={{
+                [t === theme() ? 'bg-gray-200' : 'bg-gray-100']: true,
+              }}
+              onClick={() => setTheme(t as Theme)}
+            >
+              {t}
+            </button>
+          )}
+        </For>
+      </div>
+      <EditableContributionGrid theme={theme()} />
     </main>
   );
 };
