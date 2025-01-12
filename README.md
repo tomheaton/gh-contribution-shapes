@@ -1,3 +1,5 @@
-# gh-contribution-shapes
+# GH Contribution Shapes
 
-gh-contribution-shapes
+GH Contribution Shapes.
+
+![GH Contribution Shapes](./docs/screenshot.png)
