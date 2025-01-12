@@ -55,29 +55,6 @@ function getColour(count: number, theme: Theme): string {
   return themes[theme][count] || themes[theme].default;
 };
 
-function ContributionSquare(props: { count: number, theme: Theme }) {
-  return (
-    <div
-      class="size-3 rounded-sm"
-      style={{ 'background-color': getColour(props.count, props.theme) }}
-    />
-  );
-}
-
-function ContributionGrid(props: { theme: Theme }) {
-  const contributions = generateContributionData();
-
-  return (
-    <div class="square-grid">
-      <For each={contributions}>
-        {(count) => (
-          <ContributionSquare count={count} theme={props.theme} />
-        )}
-      </For>
-    </div>
-  );
-};
-
 function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius }) {
   return (
     <button
@@ -98,7 +75,7 @@ function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRad
   const [contributions, setContributions] = createSignal(generateContributionData(52 * 52));
 
   return (
-    <div class="square-grid">
+    <div class="contribution-grid">
       <For each={contributions()}>
         {(count, index) => (
           <EditableContributionSquare

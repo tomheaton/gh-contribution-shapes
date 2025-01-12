@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer components {
-  .square-grid {
+  .contribution-grid {
     display: grid;
     /* 52 weeks (columns) */
     grid-template-columns: repeat(52, 12px);
