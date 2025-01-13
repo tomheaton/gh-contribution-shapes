@@ -116,7 +116,7 @@ export default function App() {
         <For each={Object.keys(themes)}>
           {(t) => (
             <button
-              class="px-2 py-1 text-sm font-semibold"
+              class="px-2 py-1 text-sm font-semibold capitalize"
               classList={{
                 [t === theme() ? 'bg-gray-200' : 'bg-gray-100']: true,
                 [borderRadius()]: true,
