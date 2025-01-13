@@ -2,12 +2,15 @@ import { createSignal, For } from "solid-js";
 
 const daysInYear: number = 364;
 
+// TODO: split into utilts
 function generateContributionData(length: number = daysInYear): number[] {
   return Array.from({ length }, () =>
     Math.floor(Math.random() * 5)
   );
 };
 
+
+// TODO: split into data
 const themes = {
   official: {
     // 0: '#0d1117',
@@ -47,14 +50,19 @@ const themes = {
 
 type Theme = keyof typeof themes;
 
-const borderRadii = ['rounded-none', 'rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-full'] as const;
+const borderRadii = {
+  'rounded-none': 'Square',
+  'rounded-sm': 'Rounded',
+  'rounded-full': 'Circle',
+} as const;
 
-type BorderRadius = typeof borderRadii[number];
+type BorderRadius = keyof typeof borderRadii;
 
 function getColour(count: number, theme: Theme): string {
   return themes[theme][count] || themes[theme].default;
 };
 
+// TODO: split into components
 function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius }) {
   return (
     <button
@@ -103,6 +111,7 @@ export default function App() {
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
       <h1 class="text-2xl font-bold tracking-tighter">My Contributions</h1>
+      {/* TODO: make this a dropdown */}
       <div class="flex gap-x-2">
         <For each={Object.keys(themes)}>
           {(t) => (
@@ -119,9 +128,10 @@ export default function App() {
           )}
         </For>
       </div>
+      {/* TODO: make this a dropdown */}
       <div class="flex gap-x-2">
-        <For each={borderRadii}>
-          {(r) => (
+        <For each={Object.keys(borderRadii)}>
+          {(r: BorderRadius) => (
             <button
               class="px-2 py-1 text-sm font-semibold"
               classList={{
@@ -130,12 +140,14 @@ export default function App() {
               }}
               onClick={() => setBorderRadius(r)}
             >
-              {r}
+              {borderRadii[r]}
             </button>
           )}
         </For>
       </div>
+      {/* TODO: make editable an option */}
       <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} />
+      {/* TODO: add game of life mode */}
     </main>
   );
 };
