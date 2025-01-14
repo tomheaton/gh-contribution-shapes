@@ -58,20 +58,26 @@ const borderRadii = {
 
 type BorderRadius = keyof typeof borderRadii;
 
+const modes = ['Standard', 'Editable', 'Game Of Life'] as const;
+
+type Mode = typeof modes[number];
+
 function getColour(count: number, theme: Theme): string {
   return themes[theme][count] || themes[theme].default;
 };
 
 // TODO: split into components
-function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius }) {
+function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius, editable: boolean }) {
   return (
     <button
       class="size-3"
       classList={{
-        [props.borderRadius]: true
+        [props.borderRadius]: true,
+        [props.editable ? 'cursor-pointer' : 'cursor-default']: true,
       }}
       style={{ 'background-color': getColour(props.count, props.theme) }}
       onClick={() => {
+        if (!props.editable) return;
         const newCount = (props.count + 1) % 5;
         props.setCount(newCount);
       }}
@@ -79,7 +85,7 @@ function EditableContributionSquare(props: { count: number, setCount: (count: nu
   );
 }
 
-function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRadius }) {
+function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRadius, editable: boolean }) {
   const [contributions, setContributions] = createSignal(generateContributionData(52 * 52));
 
   return (
@@ -88,6 +94,7 @@ function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRad
         {(count, index) => (
           <EditableContributionSquare
             count={count}
+            editable={props.editable}
             setCount={(newCount) => {
               setContributions((contributions) => {
                 const newContributions = [...contributions];
@@ -107,6 +114,7 @@ function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRad
 export default function App() {
   const [theme, setTheme] = createSignal<Theme>('official');
   const [borderRadius, setBorderRadius] = createSignal<BorderRadius>('rounded-sm');
+  const [mode, setMode] = createSignal<Mode>('Standard');
 
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
@@ -145,8 +153,24 @@ export default function App() {
           )}
         </For>
       </div>
-      {/* TODO: make editable an option */}
-      <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} />
+      {/* TODO: make this a dropdown */}
+      <div class="flex gap-x-2">
+        <For each={modes}>
+          {(m) => (
+            <button
+              class="px-2 py-1 text-sm font-semibold"
+              classList={{
+                [m === mode() ? 'bg-gray-200' : 'bg-gray-100']: true,
+                [borderRadius()]: true,
+              }}
+              onClick={() => setMode(m)}
+            >
+              {m}
+            </button>
+          )}
+        </For>
+      </div>
+      <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} editable={mode() !== 'Standard'} />
       {/* TODO: add game of life mode */}
     </main>
   );
