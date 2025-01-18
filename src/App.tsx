@@ -10,57 +10,57 @@ export default function App() {
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
       <h1 class="text-2xl font-bold tracking-tighter">My Contributions</h1>
-      {/* TODO: make this a dropdown */}
-      <div class="flex gap-x-2">
-        <For each={Object.keys(themes)}>
-          {(t) => (
-            <button
-              class="px-2 py-1 text-sm font-semibold capitalize"
-              classList={{
-                [t === theme() ? 'bg-gray-200' : 'bg-gray-100']: true,
-                [borderRadius()]: true,
-              }}
-              onClick={() => setTheme(t as Theme)}
-            >
-              {t}
-            </button>
-          )}
-        </For>
+
+      <div class="flex gap-x-4">
+        <select
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          classList={{
+            [borderRadius()]: true,
+          }}
+          onChange={(e) => setTheme(e.currentTarget.value as Theme)}
+        >
+          <For each={Object.keys(themes)}>
+            {(t) => (
+              <option value={t}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </option>
+            )}
+          </For>
+        </select>
+
+        <select
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          classList={{
+            [borderRadius()]: true,
+          }}
+          onChange={(e) => setBorderRadius(e.currentTarget.value as BorderRadius)}
+        >
+          <For each={Object.keys(borderRadii)}>
+            {(r: BorderRadius) => (
+              <option value={r}>
+                {borderRadii[r]}
+              </option>
+            )}
+          </For>
+        </select>
+
+        <select
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          classList={{
+            [borderRadius()]: true,
+          }}
+          onChange={(e) => setMode(e.currentTarget.value as Mode)}
+        >
+          <For each={modes}>
+            {(m) => (
+              <option value={m}>
+                {m}
+              </option>
+            )}
+          </For>
+        </select>
       </div>
-      {/* TODO: make this a dropdown */}
-      <div class="flex gap-x-2">
-        <For each={Object.keys(borderRadii)}>
-          {(r: BorderRadius) => (
-            <button
-              class="px-2 py-1 text-sm font-semibold"
-              classList={{
-                [r === borderRadius() ? 'bg-gray-200' : 'bg-gray-100']: true,
-                [borderRadius()]: true,
-              }}
-              onClick={() => setBorderRadius(r)}
-            >
-              {borderRadii[r]}
-            </button>
-          )}
-        </For>
-      </div>
-      {/* TODO: make this a dropdown */}
-      <div class="flex gap-x-2">
-        <For each={modes}>
-          {(m) => (
-            <button
-              class="px-2 py-1 text-sm font-semibold"
-              classList={{
-                [m === mode() ? 'bg-gray-200' : 'bg-gray-100']: true,
-                [borderRadius()]: true,
-              }}
-              onClick={() => setMode(m)}
-            >
-              {m}
-            </button>
-          )}
-        </For>
-      </div>
+
       <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} editable={mode() !== 'Standard'} />
       {/* TODO: add game of life mode */}
     </main>
