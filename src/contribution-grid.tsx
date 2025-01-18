@@ -2,15 +2,21 @@ import { createSignal, For } from "solid-js";
 import type { BorderRadius, Theme } from "./data";
 import { generateContributionData, getColour } from "./utils";
 
-function EditableContributionSquare(props: { count: number, setCount: (count: number) => void, theme: Theme, borderRadius: BorderRadius, editable: boolean }) {
+function EditableContributionSquare(props: {
+  count: number;
+  setCount: (count: number) => void;
+  theme: Theme;
+  borderRadius: BorderRadius;
+  editable: boolean;
+}) {
   return (
     <button
       class="size-3"
       classList={{
         [props.borderRadius]: true,
-        [props.editable ? 'cursor-pointer' : 'cursor-default']: true,
+        [props.editable ? "cursor-pointer" : "cursor-default"]: true,
       }}
-      style={{ 'background-color': getColour(props.count, props.theme) }}
+      style={{ "background-color": getColour(props.count, props.theme) }}
       onClick={() => {
         if (!props.editable) return;
         const newCount = (props.count + 1) % 5;
@@ -20,7 +26,11 @@ function EditableContributionSquare(props: { count: number, setCount: (count: nu
   );
 }
 
-export function EditableContributionGrid(props: { theme: Theme, borderRadius: BorderRadius, editable: boolean }) {
+export function EditableContributionGrid(props: {
+  theme: Theme;
+  borderRadius: BorderRadius;
+  editable: boolean;
+}) {
   const [contributions, setContributions] = createSignal(generateContributionData(52 * 52));
 
   return (
@@ -43,5 +53,5 @@ export function EditableContributionGrid(props: { theme: Theme, borderRadius: Bo
         )}
       </For>
     </div>
-  )
-};
+  );
+}

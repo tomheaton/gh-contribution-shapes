@@ -1,4 +1,4 @@
-import { type Theme, themes } from "./data";
+import { themes, type Theme } from "./data";
 
 const daysInYear: number = 364;
 

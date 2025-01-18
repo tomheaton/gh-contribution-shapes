@@ -3,9 +3,9 @@ import { EditableContributionGrid } from "./contribution-grid";
 import { borderRadii, modes, themes, type BorderRadius, type Mode, type Theme } from "./data";
 
 export default function App() {
-  const [theme, setTheme] = createSignal<Theme>('official');
-  const [borderRadius, setBorderRadius] = createSignal<BorderRadius>('rounded-sm');
-  const [mode, setMode] = createSignal<Mode>('Standard');
+  const [theme, setTheme] = createSignal<Theme>("official");
+  const [borderRadius, setBorderRadius] = createSignal<BorderRadius>("rounded-sm");
+  const [mode, setMode] = createSignal<Mode>("Standard");
 
   return (
     <main class="flex flex-col items-center justify-center gap-y-4 h-screen">
@@ -20,11 +20,7 @@ export default function App() {
           onChange={(e) => setTheme(e.currentTarget.value as Theme)}
         >
           <For each={Object.keys(themes)}>
-            {(t) => (
-              <option value={t}>
-                {t.charAt(0).toUpperCase() + t.slice(1)}
-              </option>
-            )}
+            {(t) => <option value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>}
           </For>
         </select>
 
@@ -36,11 +32,7 @@ export default function App() {
           onChange={(e) => setBorderRadius(e.currentTarget.value as BorderRadius)}
         >
           <For each={Object.keys(borderRadii)}>
-            {(r: BorderRadius) => (
-              <option value={r}>
-                {borderRadii[r]}
-              </option>
-            )}
+            {(r: BorderRadius) => <option value={r}>{borderRadii[r]}</option>}
           </For>
         </select>
 
@@ -51,18 +43,16 @@ export default function App() {
           }}
           onChange={(e) => setMode(e.currentTarget.value as Mode)}
         >
-          <For each={modes}>
-            {(m) => (
-              <option value={m}>
-                {m}
-              </option>
-            )}
-          </For>
+          <For each={modes}>{(m) => <option value={m}>{m}</option>}</For>
         </select>
       </div>
 
-      <EditableContributionGrid theme={theme()} borderRadius={borderRadius()} editable={mode() !== 'Standard'} />
+      <EditableContributionGrid
+        theme={theme()}
+        borderRadius={borderRadius()}
+        editable={mode() !== "Standard"}
+      />
       {/* TODO: add game of life mode */}
     </main>
   );
-};
+}
