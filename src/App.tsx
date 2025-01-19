@@ -13,7 +13,7 @@ export default function App() {
 
       <div class="flex gap-x-4">
         <select
-          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200 cursor-pointer"
           classList={{
             [borderRadius()]: true,
           }}
@@ -25,7 +25,7 @@ export default function App() {
         </select>
 
         <select
-          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200 cursor-pointer"
           classList={{
             [borderRadius()]: true,
           }}
@@ -37,7 +37,7 @@ export default function App() {
         </select>
 
         <select
-          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200"
+          class="flex gap-x-2 px-2 py-1 text-sm font-semibold bg-gray-200 cursor-pointer"
           classList={{
             [borderRadius()]: true,
           }}
